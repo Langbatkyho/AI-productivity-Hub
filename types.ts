@@ -1,5 +1,5 @@
 export enum UserRole {
-  SALES = 'Kinh doanh & Marketing',
+  PRODUCTION = 'Sản xuất',
   OPS = 'Vận hành/Nhân sự/Admin',
   TECH = 'Kỹ thuật/CNTT'
 }
@@ -33,7 +33,7 @@ export interface Blueprint {
   description: string;
   icon: string;
   role: UserRole;
-  videoDuration: string;
+  guideContent: string; // Detailed text guide instead of video
   toolsInvolved: string[]; // e.g., ["Zapier", "Google Sheets"]
   goldenPrompt: string; // The prompt user copies
   steps: string[]; // High level steps

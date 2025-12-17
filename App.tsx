@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { UserRole, AppState, Recipe, Blueprint } from './types';
+import { useState, useEffect } from 'react';
+import { UserRole, AppState } from './types';
 import { ALL_RECIPES, BLUEPRINTS } from './constants';
 import { RecipeCard } from './components/RecipeCard';
 import { BlueprintCard } from './components/BlueprintCard';
 import { generateRecipeContent } from './services/geminiService';
 import { 
-  LayoutGrid, BookOpen, ChevronRight, PlayCircle, Copy, CheckCircle, 
-  ArrowLeft, Search, Loader2, Star, Zap, Award 
+  LayoutGrid, BookOpen, ChevronRight, Copy, CheckCircle, 
+  ArrowLeft, Loader2, Star, Zap, Award, FileText 
 } from 'lucide-react';
 
 export default function App() {
@@ -47,7 +47,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [showLibraryModal, setShowLibraryModal] = useState(false);
   const [libraryFilter, setLibraryFilter] = useState<'Tất cả' | 'Viết' | 'Đọc' | 'Phân tích'>('Tất cả');
-
+  
   const handleRoleSelect = (role: UserRole) => {
     setState(prev => ({ ...prev, role, view: 'DASHBOARD' }));
   };
@@ -290,7 +290,9 @@ export default function App() {
     return (
       <div className="max-w-3xl mx-auto pb-12">
         <button 
-          onClick={() => setState(prev => ({ ...prev, view: 'DASHBOARD', activeBlueprintId: null }))}
+          onClick={() => {
+            setState(prev => ({ ...prev, view: 'DASHBOARD', activeBlueprintId: null }));
+          }}
           className="flex items-center text-slate-500 hover:text-slate-800 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" /> Quay lại
@@ -309,15 +311,20 @@ export default function App() {
           <div className="p-8 grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-8">
               
-              {/* Video Mock */}
-              <div className="aspect-video bg-slate-800 rounded-xl flex flex-col items-center justify-center border border-slate-700 relative group cursor-pointer hover:border-indigo-500 transition-all">
-                <PlayCircle className="w-16 h-16 text-indigo-500 group-hover:scale-110 transition-transform" />
-                <span className="mt-4 font-medium text-slate-300">Xem Hướng dẫn ({activeBlueprint.videoDuration})</span>
+              {/* Text Guide Container (Replaces Video) */}
+              <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
+                 <div className="flex items-center gap-2 mb-4 text-indigo-400">
+                    <FileText className="w-6 h-6" />
+                    <h3 className="text-lg font-bold">Hướng dẫn chi tiết</h3>
+                 </div>
+                 <div className="prose prose-invert prose-slate max-w-none text-slate-300 text-sm whitespace-pre-wrap leading-relaxed">
+                    {activeBlueprint.guideContent}
+                 </div>
               </div>
 
-              {/* Steps */}
+              {/* Steps (High Level Summary) */}
               <div>
-                <h3 className="text-xl font-bold mb-4">Các bước Thực hiện</h3>
+                <h3 className="text-xl font-bold mb-4">Các bước tóm tắt</h3>
                 <ol className="space-y-4">
                   {activeBlueprint.steps.map((step, idx) => (
                     <li key={idx} className="flex gap-4">
@@ -424,7 +431,7 @@ export default function App() {
       {/* Top Navigation for logged in users */}
       {state.view !== 'ONBOARDING' && (
         <nav className="bg-white border-b border-slate-200 sticky top-0 z-40 px-4 md:px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-slate-900 cursor-pointer" onClick={() => setState(prev => ({...prev, view: 'DASHBOARD'}))}>
+          <div className="flex items-center gap-2 font-bold text-slate-900 cursor-pointer" onClick={() => setState(prev => ({...prev, role: null, view: 'ONBOARDING'}))}>
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
               <Zap className="w-5 h-5 text-white" />
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Blueprint } from '../types';
 import { getIcon } from '../constants';
-import { PlayCircle, CheckCircle } from 'lucide-react';
+import { BookOpen, CheckCircle } from 'lucide-react';
 
 interface Props {
   blueprint: Blueprint;
@@ -44,8 +44,8 @@ export const BlueprintCard: React.FC<Props> = ({ blueprint, onClick, isCompleted
 
         <div className="flex items-center justify-between">
           <div className={`flex items-center gap-2 text-xs font-medium ${isCompleted ? 'text-emerald-800' : 'text-slate-400'}`}>
-            <PlayCircle className="w-4 h-4" />
-            {blueprint.videoDuration} Video HD
+            <BookOpen className="w-4 h-4" />
+            Hướng dẫn chi tiết
           </div>
           <span className={`text-sm font-bold ${isCompleted ? 'text-emerald-600' : 'text-indigo-400'} group-hover:underline`}>
             {isCompleted ? 'Xem lại' : 'Mở Lab'} &rarr;
